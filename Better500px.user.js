@@ -32,3 +32,52 @@
 // 500px already uses jQuery
 var $ = unsafeWindow.jQuery;
 
+$("head").append(" \
+<style> \
+.photos .thumb .info .right { opacity: 100; } \
+.photos .thumb .fav, .search_result .search_result_photo .fav { position: absolute; top: 3px;right: 3px; width: 16px; height: 16px; overflow: hidden; } \
+.search_result_photo { position: relative; } \
+</style> \
+");
+
+// check if the user is connected and get his username
+var isConnected = false;
+var username = '';
+if ($('#menu_profile_login').length == 0) {
+    var isConnected = true;
+    var username = $('#menu_profile .username').attr('href').replace(/\//,'');
+}
+
+if (isConnected) {
+
+    // check if this is a page with a list of photos
+    if ($('.photos').length > 0) {
+
+        // check if this is not my own favorites page
+        var isOwnFavorites = new RegExp('^http://500px.com/' + username + '/favorites');
+        if (!isOwnFavorites.exec(location.href)) {
+            // show for each photo if it is already a favorite
+            $('.thumb').each(function() {
+                var that = $(this);
+                var url = that.find('a.image').attr('href');
+                that.append('<div class="fav"></div>').find('.fav').load(url + ' #fave_link');
+                that = null;
+                url = null;
+            });
+        }
+    }
+    
+    // check if this is a search result with a list of photos
+    if ($('.search_result_photo').length > 0) {
+
+        // show for each photo if it is already a favorite
+        $('.search_result_photo').each(function() {
+            var that = $(this);
+            var url = that.find('a').attr('href');
+            that.append('<div class="fav"></div>').find('.fav').load(url + ' #fave_link');
+            that = null;
+            url = null;
+        });
+    }
+    
+}
