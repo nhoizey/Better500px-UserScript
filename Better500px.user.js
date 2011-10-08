@@ -4,9 +4,11 @@
 //
 // Better500px
 // UserScript to enhance 500px.com
+// http://dev.gasteroprod.com/Better500px-UserScript/
 //
 // Author
 // Nicolas Hoizey <nicolas@hoizey.com>
+// http://gasteroprod.com/
 //
 // --------------------------------------------------------------------
 // This is a Greasemonkey user script.
@@ -22,9 +24,9 @@
 //
 // ==UserScript==
 // @name          Better500px
-// @namespace     http://gasteroprod.com/
+// @namespace     http://dev.gasteroprod.com/Better500px-UserScript/
 // @description   Enhances 500px.com
-// @version       0.1
+// @version       1.0
 // @include       http://500px.com/*
 // @include       http://*.500px.com/*
 // ==/UserScript==
