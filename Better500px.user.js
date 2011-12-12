@@ -22,27 +22,31 @@
 // @name          Better500px
 // @namespace     com.gasteroprod.dev.500px
 // @description   Enhances 500px.com
-// @version       1.2
+// @version       1.4
 // @include       http://500px.com/*
 // @include       http://*.500px.com/*
 // ==/UserScript==
 
 var better500px = function () {
     var isConnected = false,
-        username = '';
-
-    // 500px already uses jQuery
-    if (typeof unsafeWindow != 'undefined') {
-        jQuery = unsafeWindow.jQuery;
-    } else {
-        $.noConflict();
-    }
+        username = '',
+        allLoaded = false,
+        sortByDateHtml = jQuery('.rightside .photos').clone(),
+        sortByScoreHtml = '',
+        sortByFavsHtml = '';
 
     jQuery("head").append(" \
         <style> \
         .photos .thumb .info .right { opacity: 100; } \
         .photos .thumb .fav, .search_result .search_result_photo .fav { position: absolute; top: 3px;right: 3px; width: 16px; height: 16px; overflow: hidden; } \
         .search_result_photo { position: relative; } \
+        .sortby ul { display: inline; }\
+        .sortby li { display: inline; padding: .3em; }\
+        .sortby li:after { content: ','; }\
+        .sortby li:last-child:after { content: none; }\
+        .sortby .active { font-weight: bold; }\
+        .sortby a { cursor: pointer; }\
+        .sortby .loading { padding-left: 20px; background: url('/icons/fave_loader.gif') no-repeat top left; }\
         </style> \
         ");
 
@@ -50,9 +54,6 @@ var better500px = function () {
     if (jQuery('#menu_profile_login').length == 0) {
         var isConnected = true;
         var username = jQuery('#menu_profile .username').attr('href').replace(/\//, '');
-    }
-
-    if (isConnected) {
 
         // check if this is a page with a list of photos
         if (jQuery('.photos').length > 0) {
@@ -90,21 +91,103 @@ var better500px = function () {
                 });
             }, 500);
         }
+
+        jQuery('.tabs').after('<div class="sortby">Sort by<ul><li class="active"><a class="date">date</a></li><li><a class="score">score</a></li><!--<li><a class="favs">favorites</a></li>--></ul></div>');
+        jQuery('.sortby a').bind('click', function() {
+                var that = jQuery(this);
+                var type = that.attr('class');
+                var previousType = jQuery('.sortby li.active a').attr('class');
+                if (type != previousType) {
+                    jQuery('.sortby li').removeClass('active');
+                    that.parent().addClass('active');
+                    switch(type) {
+                        case 'date':
+                            if (sortByDateHtml != '') {
+                                jQuery('.rightside .photos').replaceWith(sortByDateHtml);
+                            }
+                            break;
+                        case 'score':
+                            if (sortByScoreHtml != '') {
+                                jQuery('.rightside .photos').replaceWith(sortByScoreHtml);
+                            } else {
+                                jQuery('.sortby .score').parent().addClass('loading');
+                                loadAll(sortByScore);
+                            }
+                            break;
+                        case 'favs':
+                            if (sortByFavsHtml != '') {
+                                jQuery('.rightside .photos').replaceWith(sortByFavsHtml);
+                            } else {
+                                jQuery('.sortby .favs').parent().addClass('loading');
+                                loadAll(sortByFavs);
+                            }
+                            break;
+                        default:
+                            // what?
+                    }
+                }
+            });
+        sortByDateHtml = jQuery('.rightside .photos').clone();
+    }
+
+    var loadAll = function (loadAllCallback) {
+        if (allLoaded) {
+            loadAllCallback();
+        } else {
+            var nextPage = jQuery(".photo_paginate .next_page").attr("href");
+            if (nextPage == null || nextPage == undefined) {
+                jQuery('.photo_paginate').remove();
+                allLoaded = true;
+                sortByDateHtml = jQuery('.rightside .photos').clone();
+                loadAllCallback();
+                return;
+            } else {
+                jQuery(".photo_paginate .next_page").attr("href", null);
+                jQuery.get(nextPage, function (data) {
+                    var jData = jQuery(data);
+                    jData.find(".photos.profile .thumb").appendTo(".photos.profile");
+                    jQuery(".photo_paginate").replaceWith(jData.find(".photo_paginate"));
+                    loadAll(loadAllCallback);
+                });
+            }
+        }
+    }
+
+    var sortByScore = function () {
+        $('.photos .thumb, .search_result_photo').sortElements(function(a, b){
+            var aValue = $(a).find('.right').text().trim();
+            var bValue = $(b).find('.right').text().trim();
+            aValue = (aValue == 'N/A') ? 0 : parseInt(aValue, 10);
+            bValue = (bValue == 'N/A') ? 0 : parseInt(bValue, 10);
+            return aValue > bValue ? -1 : 1;
+        });
+        jQuery('.sortby .loading').removeClass('loading');
+        sortByScoreHtml = jQuery('.rightside .photos').clone();
+    }
+
+    var sortByFavs = function () {
+        $('.photos .thumb, .search_result_photo').sortElements(function(a, b){
+            var aValue = $(a).find('.right').text().trim();
+            var bValue = $(b).find('.right').text().trim();
+            aValue = (aValue == 'N/A') ? 0 : parseInt(aValue, 10);
+            bValue = (bValue == 'N/A') ? 0 : parseInt(bValue, 10);
+            return aValue > bValue ? -1 : 1;
+        });
+        jQuery('.sortby .loading').removeClass('loading');
+        sortByFavsHtml = jQuery('.rightside .photos').clone();
     }
 }
 
-// taken from @freeatnet_en's 500px_infscroll GM script
-if (navigator.userAgent.match(/Firefox/)) {
-    unsafeWindow.onload = better500px;
-} else if (navigator.userAgent.match(/Chrome/)) {
-    var script = document.createElement("script");
-    script.setAttribute("src", "http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js");
-    script.addEventListener('load', function () {
-        var script = document.createElement("script");
-        script.textContent = "(" + better500px.toString() + ")();";
-        document.body.appendChild(script);
+var jQueryScript = document.createElement('script');
+jQueryScript.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js');
+jQueryScript.addEventListener('load', function () {
+    var sortElementsScript = document.createElement('script')
+    sortElementsScript.setAttribute('src', 'https://raw.github.com/padolsey/jQuery-Plugins/master/sortElements/jquery.sortElements.js');
+    sortElementsScript.addEventListener('load', function() {
+        var better500pxScript = document.createElement('script');
+        better500pxScript.textContent = '(' + better500px.toString() + ')();';
+        document.body.appendChild(better500pxScript);
     }, false);
-    document.body.appendChild(script);
-} else {
-    alert("I do not know what to do :(");
-}
+    document.body.appendChild(sortElementsScript);
+}, false);
+document.body.appendChild(jQueryScript);
