@@ -39,10 +39,10 @@ var better500px = function () {
     
     jQuery("head").append(" \
         <style> \
-        .photo .fav, .search_result .search_result_photo .fav { position: absolute; top: 3px; right: 3px; width: 22px; height: 22px; overflow: hidden; } \
         .photo .fav .button { padding: 2px; } \
-        .photo .fav img { box-shadow: none; } \
         .search_result_photo { position: relative; } \
+        div.photo .fav { position: absolute; top: 3px; right: 3px; width: 22px; height: 22px; overflow: hidden; } \
+        div.photo .fav img { box-shadow: none; } \
         .sortby ul { display: inline; }\
         .sortby li { display: inline; padding: .3em; }\
         .sortby li:after { content: ','; }\
@@ -59,7 +59,7 @@ var better500px = function () {
         var username = jQuery('#username a').eq(0).attr('href').replace(/.*\//, '');
 
         // check if this is a page with a list of photos
-        if (jQuery('.photo').length > 0) {
+        if (jQuery('div.photo').length > 0) {
 
             // check if this is not my own favorites page
             var isOwnFavorites = new RegExp('^http://500px.com/' + username + '/favorites');
@@ -67,7 +67,7 @@ var better500px = function () {
 
                 setInterval(function(){
                     // show for each photo if it is already a favorite
-                    jQuery('.photo').not('.better500px').slice(0, 5).each(function () {
+                    jQuery('div.photo').not('.better500px').slice(0, 5).each(function () {
                         var that = jQuery(this);
                         var url = that.find('a').attr('href');
                         that.append('<div class="fav"></div>').find('.fav').load(url + ' #vote_button_fav');
