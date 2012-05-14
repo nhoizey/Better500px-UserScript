@@ -39,7 +39,7 @@ var better500px = function () {
     
     jQuery("head").append(" \
         <style> \
-        div.photo .fav { position: absolute; top: 3px; right: 3px; width: 22px; height: 22px; overflow: hidden; } \
+        div.photo .fav { position: absolute; top: 3px; right: 3px; width: 17px; height: 15px; overflow: hidden; } \
         div.photo .fav img { box-shadow: none; } \
         .sortby ul { display: inline; }\
         .sortby li { display: inline; padding: .3em; }\
@@ -68,7 +68,7 @@ var better500px = function () {
                     jQuery('div.photo').not('.better500px').slice(0, 5).each(function () {
                         var that = jQuery(this);
                         var url = that.find('a').attr('href');
-                        that.append('<div class="fav"></div>').find('.fav').load(url + ' #vote_button_fav');
+                        that.append('<div class="fav"></div>').find('.fav').load(url + ' #vote_button_fav .button[style!="display:none;"] img');
                         that.addClass('better500px');
                         that = null;
                         url = null;
