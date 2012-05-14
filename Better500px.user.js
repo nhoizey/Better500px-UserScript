@@ -164,7 +164,7 @@ var better500px = function () {
 }
 
 var jQueryScript = document.createElement('script');
-jQueryScript.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js');
+jQueryScript.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js');
 jQueryScript.addEventListener('load', function () {
     var sortElementsScript = document.createElement('script')
     sortElementsScript.setAttribute('src', 'https://raw.github.com/padolsey/jQuery-Plugins/master/sortElements/jquery.sortElements.js');
