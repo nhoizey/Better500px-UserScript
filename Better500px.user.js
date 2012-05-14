@@ -39,8 +39,6 @@ var better500px = function () {
     
     jQuery("head").append(" \
         <style> \
-        .photo .fav .button { padding: 2px; } \
-        .search_result_photo { position: relative; } \
         div.photo .fav { position: absolute; top: 3px; right: 3px; width: 22px; height: 22px; overflow: hidden; } \
         div.photo .fav img { box-shadow: none; } \
         .sortby ul { display: inline; }\
