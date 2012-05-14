@@ -22,7 +22,7 @@
 // @name          Better500px
 // @namespace     com.gasteroprod.dev.500px
 // @description   Enhances 500px.com
-// @version       1.4
+// @version       2.0
 // @include       http://500px.com/*
 // @include       http://*.500px.com/*
 // ==/UserScript==
@@ -31,14 +31,17 @@ var better500px = function () {
     var isConnected = false,
         username = '',
         allLoaded = false,
-        sortByDateHtml = jQuery('.rightside .photos').clone(),
+        sortByDateHtml = '',
         sortByScoreHtml = '',
         sortByFavsHtml = '';
 
+    sortByDateHtml = jQuery('.photo.medium');
+    
     jQuery("head").append(" \
         <style> \
-        .photos .thumb .info .right { opacity: 100; } \
-        .photos .thumb .fav, .search_result .search_result_photo .fav { position: absolute; top: 3px;right: 3px; width: 16px; height: 16px; overflow: hidden; } \
+        .photo .fav, .search_result .search_result_photo .fav { position: absolute; top: 3px; right: 3px; width: 22px; height: 22px; overflow: hidden; } \
+        .photo .fav .button { padding: 2px; } \
+        .photo .fav img { box-shadow: none; } \
         .search_result_photo { position: relative; } \
         .sortby ul { display: inline; }\
         .sortby li { display: inline; padding: .3em; }\
@@ -51,12 +54,12 @@ var better500px = function () {
         ");
 
     // check if the user is connected and get his username
-    if (jQuery('#menu_profile_login').length == 0) {
+    if (jQuery('#username').length != 0) {
         var isConnected = true;
-        var username = jQuery('#menu_profile .username').attr('href').replace(/\//, '');
+        var username = jQuery('#username a').eq(0).attr('href').replace(/.*\//, '');
 
         // check if this is a page with a list of photos
-        if (jQuery('.photos').length > 0) {
+        if (jQuery('.photo').length > 0) {
 
             // check if this is not my own favorites page
             var isOwnFavorites = new RegExp('^http://500px.com/' + username + '/favorites');
@@ -64,32 +67,16 @@ var better500px = function () {
 
                 setInterval(function(){
                     // show for each photo if it is already a favorite
-                    jQuery('.thumb').not('.better500px').slice(0, 5).each(function () {
+                    jQuery('.photo').not('.better500px').slice(0, 5).each(function () {
                         var that = jQuery(this);
-                        var url = that.find('a.image').attr('href');
-                        that.append('<div class="fav"></div>').find('.fav').load(url + ' #fave_link');
+                        var url = that.find('a').attr('href');
+                        that.append('<div class="fav"></div>').find('.fav').load(url + ' #vote_button_fav');
                         that.addClass('better500px');
                         that = null;
                         url = null;
                     });
                 }, 500);
             }
-        }
-
-        // check if this is a search result with a list of photos
-        if (jQuery('.search_result_photo').length > 0) {
-
-            setInterval(function(){
-                // show for each photo if it is already a favorite
-                jQuery('.search_result_photo').not('.better500px').slice(0, 5).each(function () {
-                    var that = jQuery(this);
-                    var url = that.find('a').attr('href');
-                    that.append('<div class="fav"></div>').find('.fav').load(url + ' #fave_link');
-                    that.addClass('better500px');
-                    that = null;
-                    url = null;
-                });
-            }, 500);
         }
 
         jQuery('.tabs').after('<div class="sortby">Sort by<ul><li class="active"><a class="date">date</a></li><li><a class="score">score</a></li><!--<li><a class="favs">favorites</a></li>--></ul></div>');
