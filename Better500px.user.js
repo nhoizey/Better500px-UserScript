@@ -35,7 +35,9 @@ var better500px = function () {
         sortByScoreHtml = '',
         sortByFavsHtml = '';
 
-    sortByDateHtml = jQuery('.photo.medium');
+    jQuery('.photo_thumb').wrapAll('<div id="better500px" />');
+    sortByDateHtml = jQuery('#better500px');
+    console.log(sortByDateHtml);
     
     jQuery("head").append(" \
         <style> \
@@ -98,12 +100,12 @@ var better500px = function () {
                     switch(type) {
                         case 'date':
                             if (sortByDateHtml != '') {
-                                jQuery('.rightside .photos').replaceWith(sortByDateHtml);
+                                jQuery('#better500px').replaceWith(sortByDateHtml);
                             }
                             break;
                         case 'score':
                             if (sortByScoreHtml != '') {
-                                jQuery('.rightside .photos').replaceWith(sortByScoreHtml);
+                                jQuery('#better500px').replaceWith(sortByScoreHtml);
                             } else {
                                 jQuery('.sortby .score').parent().addClass('loading');
                                 loadAll(sortByScore);
@@ -111,7 +113,7 @@ var better500px = function () {
                             break;
                         case 'favs':
                             if (sortByFavsHtml != '') {
-                                jQuery('.rightside .photos').replaceWith(sortByFavsHtml);
+                                jQuery('#better500px').replaceWith(sortByFavsHtml);
                             } else {
                                 jQuery('.sortby .favs').parent().addClass('loading');
                                 loadAll(sortByFavs);
