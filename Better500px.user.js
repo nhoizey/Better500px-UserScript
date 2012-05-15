@@ -37,7 +37,6 @@ var better500px = function () {
 
     jQuery('.photo_thumb').wrapAll('<div id="better500px" />');
     sortByDateHtml = jQuery('#better500px');
-    console.log(sortByDateHtml);
     
     jQuery("head").append(" \
         <style> \
