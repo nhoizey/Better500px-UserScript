@@ -128,27 +128,24 @@ var better500px = function () {
     }
 
     var loadAll = function (loadAllCallback) {
-        if (allLoaded) {
-            loadAllCallback();
+      if (allLoaded) {
         sortByDateHtml = jQuery('.photo_thumb').clone();
+      } else {
+        if (nextPage == null || nextPage == undefined) {
+          allLoaded = true;
+          return;
         } else {
-            var nextPage = jQuery(".photo_paginate .next_page").attr("href");
             if (nextPage == null || nextPage == undefined) {
-                jQuery('.photo_paginate').remove();
                 allLoaded = true;
-                sortByDateHtml = jQuery('.rightside .photos').clone();
-                loadAllCallback();
                 return;
-            } else {
-                jQuery(".photo_paginate .next_page").attr("href", null);
-                jQuery.get(nextPage, function (data) {
-                    var jData = jQuery(data);
-                    jData.find(".photos.profile .thumb").appendTo(".photos.profile");
-                    jQuery(".photo_paginate").replaceWith(jData.find(".photo_paginate"));
-                    loadAll(loadAllCallback);
-                });
-            }
+          jQuery.get(nextPage, function (data) {
+            var jData = jQuery(data);
+            jData.find(".photos.profile .thumb").appendTo(".photos.profile");
+            jQuery(".photo_paginate").replaceWith(jData.find(".photo_paginate"));
+            loadAll(loadAllCallback);
+          });
         }
+      }
     }
 
     var sortByScore = function () {
