@@ -38,10 +38,12 @@ var better500px = function () {
     jQuery('.photo_thumb').wrapAll('<div id="better500px" />');
     sortByDateHtml = jQuery('#better500px');
     
-    jQuery("head").append(" \
-        <style> \
-        div.photo .fav { position: absolute; top: 3px; right: 3px; width: 17px; height: 15px; overflow: hidden; } \
-        div.photo .fav img { box-shadow: none; } \
+    jQuery("head").append("\
+        <style>\
+        div.photo .fav { position: absolute; top: 3px; right: 3px; width: 17px; height: 15px; overflow: hidden; }\
+        div.photo .fav img { box-shadow: none; }\
+        .container .col { position: relative; }\
+        .sortby { position: absolute; left: 500px; bottom: 0; }\
         .sortby ul { display: inline; }\
         .sortby li { display: inline; padding: .3em; }\
         .sortby li:after { content: ','; }\
@@ -49,7 +51,7 @@ var better500px = function () {
         .sortby .active { font-weight: bold; }\
         .sortby a { cursor: pointer; }\
         .sortby .loading { padding-left: 20px; background: url('/icons/fave_loader.gif') no-repeat top left; }\
-        </style> \
+        </style>\
         ");
 
     // check if the user is connected and get his username
