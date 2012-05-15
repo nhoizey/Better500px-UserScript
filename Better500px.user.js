@@ -68,7 +68,16 @@ var better500px = function () {
                     jQuery('div.photo').not('.better500px').slice(0, 5).each(function () {
                         var that = jQuery(this);
                         var url = that.find('a').attr('href');
-                        that.append('<div class="fav"></div>').find('.fav').load(url + ' #vote_button_fav .button[style!="display:none;"] img');
+                        jQuery.ajax({
+                          url: url,
+                          context: that
+                        }).done(function(html) {
+                          // show the red or grey heart on top right corner of the thumbnail
+                          var favStatus = jQuery('#vote_button_fav .button[style!="display:none;"] img', html);
+                          this.append('<div class="fav"></div>').find('.fav').append(favStatus);
+                          
+                          
+                        });
                         that.addClass('better500px');
                         that = null;
                         url = null;
