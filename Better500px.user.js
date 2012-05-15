@@ -76,8 +76,15 @@ var better500px = function () {
                           // show the red or grey heart on top right corner of the thumbnail
                           var favStatus = jQuery('#vote_button_fav .button[style!="display:none;"] img', html);
                           this.append('<div class="fav"></div>').find('.fav').append(favStatus);
-                          
-                          
+
+                          // store photo info as data attributes
+                          var current = jQuery('#photo_rating_score', html).text();
+                          var highest = jQuery('#photo_highest_rating', html).text();
+                          var views = jQuery('.stats .views strong', html).text();
+                          var votes = jQuery('#photo_rating_total_votes strong', html).text();
+                          var favs= jQuery('#photo_rating_favs strong', html).text();
+                          this.data('stats', { current: current, highest: highest, views: views, votes: votes, favs: favs });
+                          html = null;
                         });
                         that.addClass('better500px');
                         that = null;
@@ -150,10 +157,23 @@ var better500px = function () {
       }
     }
 
-    var sortByScore = function () {
-        $('.photos .thumb, .search_result_photo').sortElements(function(a, b){
-            var aValue = $(a).find('.right').text().trim();
-            var bValue = $(b).find('.right').text().trim();
+    var sortByHighest = function () {
+        $('.photo_thumb').sortElements(function(a, b){
+            console.log(a);
+            var aValue = $(a).data('stats').highest;
+            var bValue = $(b).data('stats').highest;
+            aValue = (aValue == 'N/A') ? 0 : parseInt(aValue, 10);
+            bValue = (bValue == 'N/A') ? 0 : parseInt(bValue, 10);
+            return aValue > bValue ? -1 : 1;
+        });
+        jQuery('.sortby .loading').removeClass('loading');
+        sortByHighestHtml = jQuery('.photo_thumb').clone();
+    }
+
+    var sortByCurrent = function () {
+        $('.photo_thumb').sortElements(function(a, b){
+            var aValue = $(a).data('stats').current;
+            var bValue = $(b).data('stats').current;
             aValue = (aValue == 'N/A') ? 0 : parseInt(aValue, 10);
             bValue = (bValue == 'N/A') ? 0 : parseInt(bValue, 10);
             return aValue > bValue ? -1 : 1;
@@ -163,9 +183,21 @@ var better500px = function () {
     }
 
     var sortByFavs = function () {
-        $('.photos .thumb, .search_result_photo').sortElements(function(a, b){
-            var aValue = $(a).find('.right').text().trim();
-            var bValue = $(b).find('.right').text().trim();
+        $('.photo_thumb').sortElements(function(a, b){
+            var aValue = $(a).data('stats').favs;
+            var bValue = $(b).data('stats').favs;
+            aValue = (aValue == 'N/A') ? 0 : parseInt(aValue, 10);
+            bValue = (bValue == 'N/A') ? 0 : parseInt(bValue, 10);
+            return aValue > bValue ? -1 : 1;
+        });
+        jQuery('.sortby .loading').removeClass('loading');
+        sortByFavsHtml = jQuery('.photo_thumb').clone();
+    }
+
+    var sortByVotes = function () {
+        $('.photo_thumb').sortElements(function(a, b){
+            var aValue = $(a).data('stats').favs;
+            var bValue = $(b).data('stats').favs;
             aValue = (aValue == 'N/A') ? 0 : parseInt(aValue, 10);
             bValue = (bValue == 'N/A') ? 0 : parseInt(bValue, 10);
             return aValue > bValue ? -1 : 1;
