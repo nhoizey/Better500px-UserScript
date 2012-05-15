@@ -35,7 +35,6 @@ var better500px = function () {
         sortByScoreHtml = '',
         sortByFavsHtml = '';
 
-    
     jQuery("head").append("\
         <style>\
         .photo_thumb .fav { position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; overflow: hidden; }\
