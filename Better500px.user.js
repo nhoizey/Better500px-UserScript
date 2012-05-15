@@ -97,7 +97,7 @@ var better500px = function () {
         }
 
         // add sorting links on top of the gallery
-        jQuery('.tabs').after('<div class="sortby">Sort by<ul><li class="active"><a class="date">date</a></li><li><a class="score">score</a></li><li><a class="favs">favorites</a></li></ul></div>');
+        jQuery('.tabs').after('<div class="sortby">Sort by<ul><li class="active"><a class="date">date</a></li><li><a class="highest">highest score</a></li><li><a class="current">current score</a></li><li><a class="favs">favorites</a></li><li><a class="votes">votes</a></li></ul></div>');
         jQuery('.sortby a').bind('click', function() {
                 var that = jQuery(this);
                 var type = that.attr('class');
