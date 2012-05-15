@@ -35,8 +35,6 @@ var better500px = function () {
         sortByScoreHtml = '',
         sortByFavsHtml = '';
 
-    jQuery('.photo_thumb').wrapAll('<div id="better500px" />');
-    sortByDateHtml = jQuery('#better500px');
     
     jQuery("head").append("\
         <style>\
@@ -131,6 +129,7 @@ var better500px = function () {
     var loadAll = function (loadAllCallback) {
         if (allLoaded) {
             loadAllCallback();
+        sortByDateHtml = jQuery('.photo_thumb').clone();
         } else {
             var nextPage = jQuery(".photo_paginate .next_page").attr("href");
             if (nextPage == null || nextPage == undefined) {
