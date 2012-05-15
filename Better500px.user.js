@@ -130,14 +130,17 @@ var better500px = function () {
     var loadAll = function (loadAllCallback) {
       if (allLoaded) {
         sortByDateHtml = jQuery('.photo_thumb').clone();
+        loadAllCallback();
       } else {
+        var nextPage = jQuery(".photo_paginate .next_page").attr("href");
         if (nextPage == null || nextPage == undefined) {
+          jQuery('.photo_paginate').remove();
           allLoaded = true;
+          sortByDateHtml = jQuery('.rightside .photos').clone();
+          loadAllCallback();
           return;
         } else {
-            if (nextPage == null || nextPage == undefined) {
-                allLoaded = true;
-                return;
+          jQuery(".photo_paginate .next_page").attr("href", null);
           jQuery.get(nextPage, function (data) {
             var jData = jQuery(data);
             jData.find(".photos.profile .thumb").appendTo(".photos.profile");
