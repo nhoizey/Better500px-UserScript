@@ -32,7 +32,9 @@ var better500px = function () {
         username = '',
         allLoaded = false,
         sortByDateHtml = '',
-        sortByScoreHtml = '',
+        sortByHighestHtml = '',
+        sortByCurrentHtml = '',
+        sortByVotesHtml = '',
         sortByFavsHtml = '';
 
     jQuery("head").append("\
