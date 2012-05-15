@@ -108,23 +108,39 @@ var better500px = function () {
                     switch(type) {
                         case 'date':
                             if (sortByDateHtml != '') {
-                                jQuery('#better500px').replaceWith(sortByDateHtml);
+                                jQuery('.photo_thumb').replaceWith(sortByDateHtml);
                             }
                             break;
-                        case 'score':
-                            if (sortByScoreHtml != '') {
-                                jQuery('#better500px').replaceWith(sortByScoreHtml);
+                        case 'highest':
+                            if (sortByHighestHtml != '') {
+                                jQuery('.photo_thumb').replaceWith(sortByHighestHtml);
                             } else {
-                                jQuery('.sortby .score').parent().addClass('loading');
-                                loadAll(sortByScore);
+                                jQuery('.sortby .highest').parent().addClass('loading');
+                                loadAll(sortByHighest);
+                            }
+                            break;
+                        case 'current':
+                            if (sortByCurrentHtml != '') {
+                                jQuery('.photo_thumb').replaceWith(sortByCurrentHtml);
+                            } else {
+                                jQuery('.sortby .current').parent().addClass('loading');
+                                loadAll(sortByCurrent);
                             }
                             break;
                         case 'favs':
                             if (sortByFavsHtml != '') {
-                                jQuery('#better500px').replaceWith(sortByFavsHtml);
+                                jQuery('.photo_thumb').replaceWith(sortByFavsHtml);
                             } else {
                                 jQuery('.sortby .favs').parent().addClass('loading');
                                 loadAll(sortByFavs);
+                            }
+                            break;
+                        case 'votes':
+                            if (sortByVotesHtml != '') {
+                                jQuery('.photo_thumb').replaceWith(sortByVotesHtml);
+                            } else {
+                                jQuery('.sortby .favs').parent().addClass('loading');
+                                loadAll(sortByVotes);
                             }
                             break;
                         default:
@@ -140,19 +156,19 @@ var better500px = function () {
         sortByDateHtml = jQuery('.photo_thumb').clone();
         loadAllCallback();
       } else {
-        var nextPage = jQuery(".photo_paginate .next_page").attr("href");
+        var nextPage = jQuery(".next_page").attr("href");
         if (nextPage == null || nextPage == undefined) {
-          jQuery('.photo_paginate').remove();
+          jQuery('.pager').remove();
           allLoaded = true;
           sortByDateHtml = jQuery('.rightside .photos').clone();
           loadAllCallback();
           return;
         } else {
-          jQuery(".photo_paginate .next_page").attr("href", null);
+          jQuery(".next_page").attr("href", null);
           jQuery.get(nextPage, function (data) {
             var jData = jQuery(data);
-            jData.find(".photos.profile .thumb").appendTo(".photos.profile");
-            jQuery(".photo_paginate").replaceWith(jData.find(".photo_paginate"));
+            jData.find(".photo_thumb").insertAfter(".photo_thumb:last");
+            jQuery(".pager").replaceWith(jData.find(".pager"));
             loadAll(loadAllCallback);
           });
         }
@@ -181,7 +197,7 @@ var better500px = function () {
             return aValue > bValue ? -1 : 1;
         });
         jQuery('.sortby .loading').removeClass('loading');
-        sortByScoreHtml = jQuery('.rightside .photos').clone();
+        sortByCurrentHtml = jQuery('.photo_thumb').clone();
     }
 
     var sortByFavs = function () {
@@ -205,7 +221,7 @@ var better500px = function () {
             return aValue > bValue ? -1 : 1;
         });
         jQuery('.sortby .loading').removeClass('loading');
-        sortByFavsHtml = jQuery('.rightside .photos').clone();
+        sortByFavsHtml = jQuery('.photo_thumb').clone();
     }
 }
 
