@@ -50,7 +50,7 @@ var better500px = function () {
         .sortby li:last-child:after { content: none; }\
         .sortby .active { font-weight: bold; }\
         .sortby a { cursor: pointer; }\
-        .sortby .loading { padding-left: 20px; background: url('/icons/fave_loader.gif') no-repeat top left; }\
+        .sortby .loading { padding-left: 20px; background: url('/unity/img/spinners/loader-small.gif') no-repeat top left; }\
         </style>\
         ");
 
