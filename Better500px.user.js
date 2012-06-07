@@ -22,7 +22,7 @@
 // @name          Better500px
 // @namespace     com.gasteroprod.dev.500px
 // @description   Enhances 500px.com
-// @version       2.1.0
+// @version       2.2.0
 // @include       http://500px.com/*
 // @include       http://*.500px.com/*
 // ==/UserScript==
@@ -62,38 +62,38 @@ var better500px = function () {
     // check if this is a page with a list of photos
     if (jQuery('.photo_thumb').length > 0) {
 
+      setInterval(function loadPhotoInfos(){
+        // show for each photo if it is already a favorite
+        jQuery('.photo_thumb').not('.better500px').not('.loading').slice(0, 3).each(function () {
+          var that = jQuery(this);
+          that.addClass('loading');
+          var url = that.find('a').eq(0).attr('href');
+          jQuery.ajax({
+            url: url,
+            context: that
+          }).done(function(html) {
+            // show the red or grey heart on top right corner of the thumbnail
+            var favStatus = jQuery('#vote_button_fav .button[style!="display:none;"] img', html);
+            this.append('<div class="fav"></div>').find('.fav').append(favStatus);
+
+            // store photo info as data attributes
+            var current = jQuery('#photo_rating_score', html).text();
+            var highest = jQuery('#photo_highest_rating', html).text();
+            var views = jQuery('.stats .views strong', html).text();
+            var votes = jQuery('#photo_rating_total_votes strong', html).text();
+            var favs= jQuery('#photo_rating_favs strong', html).text();
+            this.data('stats', { current: current, highest: highest, views: views, votes: votes, favs: favs });
+            html = null;
+            this.addClass('better500px').removeClass('loading');
+          });
+          that = null;
+          url = null;
+        });
+      }, 300);
+
       // check if this is a user gallery page
       var isUserGallery = new RegExp('^http://500px.com/[^/]+$');
       if (isUserGallery.exec(location.href)) {
-
-        setInterval(function loadPhotoInfos(){
-            // show for each photo if it is already a favorite
-            jQuery('.photo_thumb').not('.better500px').not('.loading').slice(0, 3).each(function () {
-                var that = jQuery(this);
-                that.addClass('loading');
-                var url = that.find('a').eq(0).attr('href');
-                jQuery.ajax({
-                  url: url,
-                  context: that
-                }).done(function(html) {
-                  // show the red or grey heart on top right corner of the thumbnail
-                  var favStatus = jQuery('#vote_button_fav .button[style!="display:none;"] img', html);
-                  this.append('<div class="fav"></div>').find('.fav').append(favStatus);
-
-                  // store photo info as data attributes
-                  var current = jQuery('#photo_rating_score', html).text();
-                  var highest = jQuery('#photo_highest_rating', html).text();
-                  var views = jQuery('.stats .views strong', html).text();
-                  var votes = jQuery('#photo_rating_total_votes strong', html).text();
-                  var favs= jQuery('#photo_rating_favs strong', html).text();
-                  this.data('stats', { current: current, highest: highest, views: views, votes: votes, favs: favs });
-                  html = null;
-                  this.addClass('better500px').removeClass('loading');
-                });
-                that = null;
-                url = null;
-            });
-        }, 300);
 
         // add sorting links on top of the gallery
         jQuery('.tabs').after('<div class="sortby">Sort by<ul><li class="active"><a class="date">date</a></li><li><a class="highest">highest score</a></li><li><a class="current">current score</a></li><li><a class="favs">favorites</a></li><li><a class="votes">votes</a></li></ul></div>');
@@ -150,7 +150,6 @@ var better500px = function () {
         sortByDateHtml = jQuery('.rightside .photos').clone();
       }
     }
-          
   }
 
   var loadAll = function loadAll(loadAllCallback) {
