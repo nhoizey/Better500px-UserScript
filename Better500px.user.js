@@ -151,28 +151,24 @@ var better500px = function () {
         sortByDateHtml = jQuery('.rightside .photos').clone();
     }
 
-    var loadAll = function (loadAllCallback) {
-      if (allLoaded) {
-        sortByDateHtml = jQuery('.photo_thumb').clone();
+    var loadAll = function loadAll(loadAllCallback) {
+      var nextPage = jQuery(".next_page").attr("href");
+      if (nextPage == null || nextPage == undefined) {
+        jQuery('.pager').remove();
+        if (sortByDateHtml === '') {
+          sortByDateHtml = jQuery('.photo_thumb').clone();
+        }
         jQuery('.sortby .loading').removeClass('loading');
         loadAllCallback();
+        return;
       } else {
-        var nextPage = jQuery(".next_page").attr("href");
-        if (nextPage == null || nextPage == undefined) {
-          jQuery('.pager').remove();
-          allLoaded = true;
-          sortByDateHtml = jQuery('.rightside .photos').clone();
-          loadAllCallback();
-          return;
-        } else {
-          jQuery(".next_page").attr("href", null);
-          jQuery.get(nextPage, function (data) {
-            var jData = jQuery(data);
-            jData.find(".photo_thumb").insertAfter(".photo_thumb:last");
-            jQuery(".pager").replaceWith(jData.find(".pager"));
-            loadAll(loadAllCallback);
-          });
-        }
+        jQuery(".next_page").attr("href", null);
+        jQuery.get(nextPage, function (data) {
+          var jData = jQuery(data);
+          jData.find(".photo_thumb").insertAfter(".photo_thumb:last");
+          jQuery(".pager").replaceWith(jData.find(".pager"));
+          loadAll(loadAllCallback);
+        });
       }
     }
 
