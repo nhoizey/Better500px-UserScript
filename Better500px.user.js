@@ -50,7 +50,7 @@ var better500px = function () {
         .sortby li:last-child:after { content: none; }\
         .sortby .active { font-weight: bold; }\
         .sortby a { cursor: pointer; }\
-        .sortby .loading { padding-left: 20px; background: url('/unity/img/spinners/loader-small.gif') no-repeat top left; }\
+        .sortby .loading { padding-left: 20px; background: url('/unity/img/spinners/loader-small.gif') no-repeat left; }\
         </style>\
         ");
 
@@ -68,7 +68,7 @@ var better500px = function () {
 
                 setInterval(function(){
                     // show for each photo if it is already a favorite
-                    jQuery('.photo_thumb').not('.better500px').slice(0, 5).each(function () {
+                    jQuery('.photo_thumb').not('.better500px').slice(0, 3).each(function () {
                         var that = jQuery(this);
                         var url = that.find('a').eq(0).attr('href');
                         jQuery.ajax({
@@ -92,7 +92,7 @@ var better500px = function () {
                         that = null;
                         url = null;
                     });
-                }, 500);
+                }, 300);
             }
         }
 
@@ -139,7 +139,7 @@ var better500px = function () {
                             if (sortByVotesHtml != '') {
                                 jQuery('.photo_thumb').replaceWith(sortByVotesHtml);
                             } else {
-                                jQuery('.sortby .favs').parent().addClass('loading');
+                                jQuery('.sortby .votes').parent().addClass('loading');
                                 loadAll(sortByVotes);
                             }
                             break;
@@ -154,6 +154,7 @@ var better500px = function () {
     var loadAll = function (loadAllCallback) {
       if (allLoaded) {
         sortByDateHtml = jQuery('.photo_thumb').clone();
+        jQuery('.sortby .loading').removeClass('loading');
         loadAllCallback();
       } else {
         var nextPage = jQuery(".next_page").attr("href");
@@ -177,14 +178,12 @@ var better500px = function () {
 
     var sortByHighest = function () {
         $('.photo_thumb').sortElements(function(a, b){
-            console.log(a);
             var aValue = $(a).data('stats').highest;
             var bValue = $(b).data('stats').highest;
             aValue = (aValue == 'N/A') ? 0 : parseInt(aValue, 10);
             bValue = (bValue == 'N/A') ? 0 : parseInt(bValue, 10);
             return aValue > bValue ? -1 : 1;
         });
-        jQuery('.sortby .loading').removeClass('loading');
         sortByHighestHtml = jQuery('.photo_thumb').clone();
     }
 
@@ -196,7 +195,6 @@ var better500px = function () {
             bValue = (bValue == 'N/A') ? 0 : parseInt(bValue, 10);
             return aValue > bValue ? -1 : 1;
         });
-        jQuery('.sortby .loading').removeClass('loading');
         sortByCurrentHtml = jQuery('.photo_thumb').clone();
     }
 
@@ -208,7 +206,6 @@ var better500px = function () {
             bValue = (bValue == 'N/A') ? 0 : parseInt(bValue, 10);
             return aValue > bValue ? -1 : 1;
         });
-        jQuery('.sortby .loading').removeClass('loading');
         sortByFavsHtml = jQuery('.photo_thumb').clone();
     }
 
@@ -220,7 +217,6 @@ var better500px = function () {
             bValue = (bValue == 'N/A') ? 0 : parseInt(bValue, 10);
             return aValue > bValue ? -1 : 1;
         });
-        jQuery('.sortby .loading').removeClass('loading');
         sortByFavsHtml = jQuery('.photo_thumb').clone();
     }
 }
