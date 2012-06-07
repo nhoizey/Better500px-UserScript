@@ -66,10 +66,11 @@ var better500px = function () {
             var isUserGallery = new RegExp('^http://500px.com/[^/]+$');
             if (isUserGallery.exec(location.href)) {
 
-                setInterval(function(){
+                setInterval(function loadPhotoInfos(){
                     // show for each photo if it is already a favorite
-                    jQuery('.photo_thumb').not('.better500px').slice(0, 3).each(function () {
+                    jQuery('.photo_thumb').not('.better500px').not('.loading').slice(0, 3).each(function () {
                         var that = jQuery(this);
+                        that.addClass('loading');
                         var url = that.find('a').eq(0).attr('href');
                         jQuery.ajax({
                           url: url,
@@ -87,8 +88,8 @@ var better500px = function () {
                           var favs= jQuery('#photo_rating_favs strong', html).text();
                           this.data('stats', { current: current, highest: highest, views: views, votes: votes, favs: favs });
                           html = null;
+                          this.addClass('better500px').removeClass('loading');
                         });
-                        that.addClass('better500px');
                         that = null;
                         url = null;
                     });
@@ -158,7 +159,6 @@ var better500px = function () {
         if (sortByDateHtml === '') {
           sortByDateHtml = jQuery('.photo_thumb').clone();
         }
-        jQuery('.sortby .loading').removeClass('loading');
         loadAllCallback();
         return;
       } else {
@@ -172,15 +172,20 @@ var better500px = function () {
       }
     }
 
-    var sortByHighest = function () {
-        $('.photo_thumb').sortElements(function(a, b){
-            var aValue = $(a).data('stats').highest;
-            var bValue = $(b).data('stats').highest;
-            aValue = (aValue == 'N/A') ? 0 : parseInt(aValue, 10);
-            bValue = (bValue == 'N/A') ? 0 : parseInt(bValue, 10);
-            return aValue > bValue ? -1 : 1;
-        });
-        sortByHighestHtml = jQuery('.photo_thumb').clone();
+    var sortByHighest = function sortByHighest() {
+        if (jQuery('.photo_thumb').not('.better500px').length > 0) {
+          setTimeout(sortByHighest, 300);
+        } else {
+          jQuery('.sortby .loading').removeClass('loading');
+          $('.photo_thumb').sortElements(function(a, b){
+              var aValue = $(a).data('stats').highest;
+              var bValue = $(b).data('stats').highest;
+              aValue = (aValue == 'N/A') ? 0 : parseInt(aValue, 10);
+              bValue = (bValue == 'N/A') ? 0 : parseInt(bValue, 10);
+              return aValue > bValue ? -1 : 1;
+          });
+          sortByHighestHtml = jQuery('.photo_thumb').clone();
+        }
     }
 
     var sortByCurrent = function () {
