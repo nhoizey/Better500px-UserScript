@@ -226,8 +226,8 @@ var better500px = function () {
     } else {
       jQuery('.sortby .loading').removeClass('loading');
       $('.photo_thumb').sortElements(function(a, b){
-          var aValue = $(a).data('stats').favs;
-          var bValue = $(b).data('stats').favs;
+          var aValue = $(a).data('stats').votes;
+          var bValue = $(b).data('stats').votes;
           aValue = (aValue == 'N/A') ? 0 : parseInt(aValue, 10);
           bValue = (bValue == 'N/A') ? 0 : parseInt(bValue, 10);
           return aValue > bValue ? -1 : 1;
