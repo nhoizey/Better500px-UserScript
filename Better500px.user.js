@@ -22,7 +22,7 @@
 // @name          Better500px
 // @namespace     com.gasteroprod.dev.500px
 // @description   Enhances 500px.com
-// @version       2.0
+// @version       2.0.1
 // @include       http://500px.com/*
 // @include       http://*.500px.com/*
 // ==/UserScript==
