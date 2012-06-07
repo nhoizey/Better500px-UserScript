@@ -62,9 +62,9 @@ var better500px = function () {
         // check if this is a page with a list of photos
         if (jQuery('.photo_thumb').length > 0) {
 
-            // check if this is not my own favorites page
-            var isOwnFavorites = new RegExp('^http://500px.com/' + username + '/favorites');
-            if (!isOwnFavorites.exec(location.href)) {
+            // check if this is a user gallery page
+            var isUserGallery = new RegExp('^http://500px.com/[^/]+$');
+            if (isUserGallery.exec(location.href)) {
 
                 setInterval(function(){
                     // show for each photo if it is already a favorite
