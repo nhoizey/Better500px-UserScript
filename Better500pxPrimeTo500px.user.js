@@ -23,7 +23,7 @@
 // @namespace     com.gasteroprod.lab.500px
 // @description   Enhances prime.500px.com photo pages with a link to the same photo on the main 500px site
 // @version       1.0.0
-// @include       http://prime.500px.com/photos/*
+// @include       https://prime.500px.com/photos/*
 // ==/UserScript==
 
 (function(window) {
