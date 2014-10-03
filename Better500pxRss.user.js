@@ -22,8 +22,9 @@
 // @name          Better500pxRss
 // @namespace     com.gasteroprod.lab.500px
 // @description   Enhances 500px.com gallery and favorites pages with link to the RSS feeds
-// @version       1.2.1
+// @version       1.2.2
 // @include       http://500px.com/*
+// @include       https://500px.com/*
 // ==/UserScript==
 
 (function(w, d) {
