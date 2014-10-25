@@ -22,7 +22,7 @@
 // @name          Better500pxOrderByVotes
 // @namespace     com.gasteroprod.lab.500px
 // @description   Enhances 500px.com with a link to the search for current photographer
-// @version       1.2.1
+// @version       1.2.2
 // @include       http://500px.com/*
 // @include       https://500px.com/*
 // ==/UserScript==
@@ -33,7 +33,7 @@
   	var photoLi = d.querySelectorAll('.bottom .subnav .nav li')[3],
   			userName = d.querySelector('.person .info h1').innerHTML,
   			// newLi = '<li><a href="http://500px.com/search?q=' + encodeURIComponent(userName) + '">Best of</a></li>';
-  			newLi = '<li><a href="http://500px.com/search?q=' + w.PxInitialData["user"].username + '&amp;type=photos&amp;order=rating">Best of</a></li>';
+  			newLi = '<li><a href="https://500px.com/search?q=' + w.PxInitialData["user"].username + '&amp;type=photos&amp;order=rating">Best of</a></li>';
   	photoLi.insertAdjacentHTML('afterend', newLi);
   }
 }(window, document));

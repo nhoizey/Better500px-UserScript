@@ -22,13 +22,13 @@
 // @name          Better500pxRss
 // @namespace     com.gasteroprod.lab.500px
 // @description   Enhances 500px.com gallery and favorites pages with link to the RSS feeds
-// @version       1.2.2
+// @version       1.2.3
 // @include       http://500px.com/*
 // @include       https://500px.com/*
 // ==/UserScript==
 
 (function(w, d) {
-	if (w.location.href.match(/^http:\/\/500px\.com\/([-0-9a-z_]+)(\/favorites)?$/i)) {
+	if (w.location.href.match(/^https?:\/\/500px\.com\/([-0-9a-z_]+)(\/favorites)?$/i)) {
 		// first remove existing feed links
 		var head = d.querySelector('head'),
 				rssLinks = head.querySelectorAll('link[type="application/rss+xml"]'),
