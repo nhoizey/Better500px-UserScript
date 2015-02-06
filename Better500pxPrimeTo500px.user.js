@@ -22,15 +22,13 @@
 // @name          Better500pxPrimeTo500px
 // @namespace     com.gasteroprod.lab.500px
 // @description   Enhances prime.500px.com photo pages with a link to the same photo on the main 500px site
-// @version       1.1.0
+// @version       1.2.0
 // @include       https://prime.500px.com/photos/*
 // ==/UserScript==
 
 (function(w, d) {
-  // Check if this is a photo page
-  if (d.querySelectorAll('body.photo-page').length === 1) {
-  	var elt = d.querySelectorAll('.cart-actions')[0],
-  			newA = '<a class="btn btn-primary btn-block btn-lg" style="margin-top: 1em" href="' + w.location.href.replace(/https:\/\/prime\.500px\.com\/photos\//,'http://500px.com/photo/') + '">View on 500px</a>';
-    elt.insertAdjacentHTML('beforebegin', newA);
-  }
+	parElt = d.querySelector('.navbar-right');
+	url = w.location.href.replace(/https:\/\/prime\.500px\.com\/photos\//,'https://500px.com/photo/');
+	newLink = '<li><a class="" href="' + url + '">View on 500px</a></li>';
+	parElt.innerHTML = newLink + parElt.innerHTML;
 }(window, document));
