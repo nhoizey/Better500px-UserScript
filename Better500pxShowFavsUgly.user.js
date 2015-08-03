@@ -28,12 +28,23 @@
 // @exclude       https://500px.com/blog
 // ==/UserScript==
 
-(function(window) {
+// a function that loads jQuery and calls a callback function when jQuery has finished loading
+function addJQuery(callback) {
+  var script = document.createElement("script");
+  script.setAttribute("src", "//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js");
+  script.addEventListener('load', function() {
+    var script = document.createElement("script");
+    script.textContent = "window.jQ=jQuery.noConflict(true);(" + callback.toString() + ")();";
+    document.body.appendChild(script);
+  }, false);
+  document.body.appendChild(script);
+}
+
+function showFavsUgly() {
   jQuery("head").append("\
     <style>\
-    .photo .fav { position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; font-size: 14px; line-height: 1.1; text-align: center; overflow: hidden; }\
-    .photo .fav0 { background: rgba(128, 128, 128, .8); }\
-    .photo .fav1 { background: rgba(128, 255, 128, .9); color: #fff; }\
+    .photo .fav { position: absolute; top: 1px; right: 1px; width: 20px; height: 20px; font-size: 20px; color: #c33; text-shadow: 2px 1px 3px rgba(0, 0, 0, 0.75); line-height: 1.1; text-align: center; overflow: hidden; }\
+    .photo .yes { color: #6c6; }\
     </style>\
     ");
 
@@ -42,7 +53,6 @@
       var that = jQuery(this),
           photo = that.find('[data-ga-action="Title"]').eq(0),
           photoUrl = photo.attr('href');
-      console.log(photoUrl);
       that.addClass('loading');
       jQuery.ajax({
         dataType: "html",
@@ -50,13 +60,12 @@
         context: that,
         success: function(data) {
             if (data.match(/,"favorited":true,/)) {
-              $(this).append('<div class="fav fav1">❤</div>');
+              $(this).append('<div class="fav yes">❤</div>');
             } else {
-              $(this).append('<div class="fav fav0">×</div>');
+              $(this).append('<div class="fav">×</div>');
             }
           },
         error: function (jqxhr, textStatus, error) {
-            // console.log("Request Failed: " + textStatus + ", " + error);
             $(this).append('<div class="fav fav0">?</div>');
           },
         complete: function () {
@@ -65,5 +74,8 @@
       });
     });
   }, 1000);
-}(window));
+}
+
+// load jQuery and execute the main function
+addJQuery(showFavsUgly);
 
