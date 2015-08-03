@@ -24,34 +24,29 @@
 // @description   Enhances 500px.com with fav indicators on thumbs
 // @version       1.0.0
 // @include       https://500px.com/*
-// @exclude       https://500px.com/photo/*
-// @exclude       https://500px.com/fresh*
 // @exclude       https://500px.com/stories
 // @exclude       https://500px.com/blog
-// @exclude       https://500px.com/market*
-// @exclude       https://500px.com/upgrade
 // ==/UserScript==
 
 (function(window) {
-  var token = false,
-      userId = false;
-
   jQuery("head").append("\
     <style>\
     .photo .fav { position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; font-size: 14px; line-height: 1.1; text-align: center; overflow: hidden; }\
-    .photo .fav0 { background: rgba(128, 128, 128, .5); }\
-    .photo .fav1 { background: rgba(128, 255, 128, .8); color: #fff; }\
+    .photo .fav0 { background: rgba(128, 128, 128, .8); }\
+    .photo .fav1 { background: rgba(128, 255, 128, .9); color: #fff; }\
     </style>\
     ");
 
   setInterval(function loadPhotoInfos() {
-    jQuery('body.logged_in .photos .photo').not('.Better500pxShowFavs').not('.loading').slice(0, 1).each(function () {
+    jQuery('.photos div.photo, .container div.photo').not('.Better500pxShowFavs').not('.loading').slice(0, 5).each(function () {
       var that = jQuery(this),
-          photoId = that.attr('data-photo-id');
+          photo = that.find('[data-ga-action="Title"]').eq(0),
+          photoUrl = photo.attr('href');
+      console.log(photoUrl);
       that.addClass('loading');
       jQuery.ajax({
         dataType: "html",
-        url: 'https://500px.com/photo/' + photoId,
+        url: photoUrl,
         context: that,
         success: function(data) {
             if (data.match(/,"favorited":true,/)) {
@@ -61,7 +56,7 @@
             }
           },
         error: function (jqxhr, textStatus, error) {
-            console.log("Request Failed: " + textStatus + ", " + error);
+            // console.log("Request Failed: " + textStatus + ", " + error);
             $(this).append('<div class="fav fav0">?</div>');
           },
         complete: function () {
@@ -69,6 +64,6 @@
           }
       });
     });
-  }, 500);
+  }, 1000);
 }(window));
 
