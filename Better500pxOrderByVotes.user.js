@@ -39,7 +39,6 @@
   	var photoLi = d.querySelectorAll('.bottom .subnav .nav li')[3],
   			userName = d.querySelector('.person .info h1').innerHTML.replace(/-/g, ' ').replace(/&amp;/g, '&'),
   			newLi = '<li><a href="http://500px.com/search?q=' + encodeURIComponent(userName) + '&amp;type=photos&amp;order=rating">Best of</a></li>';
-  			//newLi = '<li><a href="https://500px.com/search?q=' + w.PxInitialData["user"].username + '&amp;type=photos&amp;order=rating">Best of</a></li>';
   	photoLi.insertAdjacentHTML('afterend', newLi);
   }
 }(window, document));

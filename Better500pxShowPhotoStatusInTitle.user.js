@@ -21,8 +21,8 @@
 // ==UserScript==
 // @name          Better500pxShowStatusInTab
 // @namespace     com.gasteroprod.lab.500px
-// @description   Enhances 500px.com photo page with visual indication (👍 & ❤) in the window/tab title when a it is already liked and/or favorited
-// @version       1.0.0
+// @description   Enhances 500px.com photo page with a ❤ in the window/tab title when a it is already faved
+// @version       1.1.0
 // @include       http://500px.com/*
 // @include       https://500px.com/*
 // ==/UserScript==
@@ -34,10 +34,7 @@
     w.setInterval(function (w, d, photoTitle) {
       var title = '';
       if (d.querySelectorAll('.favorite_wrap .favorited').length) {
-        title += '&#10084; ';
-      }
-      if (d.querySelectorAll('.like_wrap .liked').length) {
-        title += '&#128077; ';
+        title += '❤ ';
       }
       d.querySelector('title').innerHTML = title + photoTitle;
     }, 2000, w, d, d.querySelector('title').innerHTML);
