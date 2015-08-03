@@ -33,7 +33,8 @@
 // ==/UserScript==
 
 (function(window) {
-  var token = false;
+  var token = false,
+      userId = false;
 
   jQuery("head").append("\
     <style>\
@@ -47,6 +48,9 @@
   setInterval(function loadPhotoInfos() {
     // Check if the user is connected
     if (PxInitialData["signed_in"]) {
+      if (!userId) {
+        userId = PxInitialData["current_user"].id;
+      }
       if (!token) {
         // Get the auth token
         token = encodeURIComponent(jQuery("meta[name=csrf-token]").attr('content'));
@@ -54,7 +58,7 @@
       jQuery('body.logged_in .photos .photo').not('.Better500pxShowFavs').not('.loading').slice(0, 1).each(function () {
         var that = jQuery(this),
             photoId = that.attr('data-photo-id'),
-            jsonUrl = 'https://api.500px.com/v1/photos/' + photoId + '/voted_and_favorited_state?user_id=authenticity_token=' + token;
+            jsonUrl = 'https://api.500px.com/v1/photos/' + photoId + '/voted_and_favorited_state?user_id=' + userId + '&authenticity_token=' + token;
         that.addClass('loading');
         jQuery.ajax({
           dataType: "json",
