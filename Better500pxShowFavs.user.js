@@ -22,14 +22,14 @@
 // @name          Better500pxShowFavs
 // @namespace     com.gasteroprod.lab.500px
 // @description   Enhances 500px.com with fav indicators on thumbs
-// @version       1.0.0
-// @include       http://500px.com/*
-// @exclude       http://500px.com/photo/*
-// @exclude       http://500px.com/fresh*
-// @exclude       http://500px.com/stories
-// @exclude       http://500px.com/blog
-// @exclude       http://500px.com/market*
-// @exclude       http://500px.com/upgrade
+// @version       2.0.0
+// @include       https://500px.com/*
+// @exclude       https://500px.com/photo/*
+// @exclude       https://500px.com/fresh*
+// @exclude       https://500px.com/stories
+// @exclude       https://500px.com/blog
+// @exclude       https://500px.com/market*
+// @exclude       https://500px.com/upgrade
 // ==/UserScript==
 
 (function(window) {
@@ -45,43 +45,38 @@
     ");
 
   setInterval(function loadPhotoInfos() {
-    // Check if the user is connected and known
-    var profileLink = jQuery('body.logged_in [data-ga-action=Username]');
-    if (profileLink.length > 0) {
+    // Check if the user is connected
+    if (PxInitialData["signed_in"]) {
       if (!token) {
         // Get the auth token
         token = encodeURIComponent(jQuery("meta[name=csrf-token]").attr('content'));
       }
-      // Check if this is a page with a list of photos
-      if (jQuery('body.logged_in .photos .photo').length > 0) {
-        // Show for 3 of the remaining photos if it is already a favorite
-        jQuery('.photo').not('.Better500pxShowFavs').not('.loading').slice(0, 3).each(function () {
-          var that = jQuery(this),
-              photoId = that.attr('data-photo-id'),
-              jsonUrl = 'https://api.500px.com/v1/photos/' + photoId + '/voted_and_favorited_state?authenticity_token=' + token;
-          that.addClass('loading');
-          jQuery.ajax({
-            dataType: "json",
-            url: jsonUrl,
-            context: that,
-            success: function(data) {
-                if (data.favorited) {
-                  $(this).append('<div class="fav fav1">Y</div>');
-                } else {
-                  $(this).append('<div class="fav fav0">N</div>');
-                }
-              },
-            error: function (jqxhr, textStatus, error) {
-                console.log("Request Failed: " + textStatus + ", " + error);
-                $(this).append('<div class="fav fav0">?</div>');
-              },
-            complete: function () {
-                $(this).addClass('Better500pxShowFavs').removeClass('loading');
+      jQuery('body.logged_in .photos .photo').not('.Better500pxShowFavs').not('.loading').slice(0, 1).each(function () {
+        var that = jQuery(this),
+            photoId = that.attr('data-photo-id'),
+            jsonUrl = 'https://api.500px.com/v1/photos/' + photoId + '/voted_and_favorited_state?user_id=authenticity_token=' + token;
+        that.addClass('loading');
+        jQuery.ajax({
+          dataType: "json",
+          url: jsonUrl,
+          context: that,
+          success: function(data) {
+              if (data.favorited) {
+                $(this).append('<div class="fav fav1">❤</div>');
+              } else {
+                $(this).append('<div class="fav fav0">×</div>');
               }
-          });
+            },
+          error: function (jqxhr, textStatus, error) {
+              console.log("Request Failed: " + textStatus + ", " + error);
+              $(this).append('<div class="fav fav0">?</div>');
+            },
+          complete: function () {
+              $(this).addClass('Better500pxShowFavs').removeClass('loading');
+            }
         });
-      }
+      });
     }
-  }, 500);
+  }, 1000);
 }(window));
 
