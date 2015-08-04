@@ -43,7 +43,7 @@ function addJQuery(callback) {
 function showFavsUgly() {
   jQuery("head").append("\
     <style>\
-    .photo .fav { position: absolute; top: 1px; right: 1px; width: 20px; height: 20px; font-size: 20px; color: #c33; text-shadow: 2px 1px 3px rgba(0, 0, 0, 0.75); line-height: 1.1; text-align: center; overflow: hidden; }\
+    .photo .fav { position: absolute; top: 1px; right: 1px; width: 20px; height: 20px; font-size: 20px; color: #c33; text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.75), 0px -1px 1px rgba(255, 255, 255, 0.75); line-height: 1.1; text-align: center; overflow: hidden; }\
     .photo .yes { color: #6c6; }\
     </style>\
     ");
